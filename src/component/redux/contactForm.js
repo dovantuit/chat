@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
-import { Field, reduxForm, touch } from 'redux-form'
+import { Field, reduxForm, initialize } from 'redux-form'
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
 import firebase from 'firebase';
-import Firebase from 'firebase';
 import Backend from '../../component/config/Backend';
+import { bindActionCreators } from 'redux';
+
 
 class FirebaseSvc {
     login = async (user, success_callback, failed_callback) => {
-        console.log('login')
-        Alert('login')
+        // console.log('login')
+        // Alert('login')
         // alert('login')
         await firebase.auth()
             .signInWithEmailAndPassword(user.email, user.password)
@@ -52,28 +53,9 @@ const renderField = ({ label, keyboardType, meta: { touched, error, warning }, i
     );
 };
 
-const submit = values => {
-    alert(`validtion success. value = ~${JSON.stringify(values)}`)
-}
-// const ContactComponent = props => {
-//     const { handleSubmit } = props;
-//     return (
-//         <View style={{ flex: 1, flexDirection: 'column', margin: 10, justifyContent: 'flex-start' }} >
-//             <Text style={{ fontSize: 18, fontWeight: 'bold', width: 200, textAlign: 'center', margin: 40, alignContent: 'center', }} >LOGIN</Text>
-//             <Field name="username" keyboardType="default" label="Username:" component={renderField} />
-//             <Field name="email" d keyboardType="email-address" label="Email:" component={renderField} />
-//             <TouchableOpacity onPress={handleSubmit(submit)} style={{ borderRadius: 10, margin: 10, alignItems: 'center', backgroundColor: 'lightblue' }} >
-//                 <Text style={{
-//                     backgroundColor: 'steeblue', color: 'white', fontSize: 16,
-//                     height: 37, width: 200, textAlign: 'center', padding: 10,
-//                 }}>Login</Text>
-//             </TouchableOpacity>
-
-//         </View>
-//     )
-// }
 
 class ContactComponent extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -90,14 +72,47 @@ class ContactComponent extends Component {
 
     onChangeUserName = name => this.setState({ name });
 
-    onPressLogin = async () => {
-        // console.log('login')
+
+    submit = values => {
+        //const log = values;
+
+        // onPressLogin(values);
         const user = {
-            email: this.state.email,
-            password: this.state.password,
-            name: (this.state.name === "") ? 'default' : this.state.name,
+            email: values.email,
+            password: values.username,
+            // name: (this.state.name === "") ? 'default' : this.state.name,
         };
-        firebaseSvc.login(user, this.loginSuccess, this.loginFailed);
+        firebaseSvc.login(user, this.loginSuccess(), this.loginFailed());
+
+        // this.setState({
+        //     email:log.email,
+        //     name:log.username
+        // },()=>console.log(this.state))
+
+        //console.log('>>>>>>log')
+        // console.log(log.username)
+
+        // console.log(JSON.stringify(values))
+
+
+        //alert(`validtion success. value = ~${JSON.stringify(values)}`)
+    }
+
+
+    onPressLogin = values => {
+
+        // console.log('login')
+        // const user = {
+        //     email: this.state.email,
+        //     password: this.state.password,
+        //     name: (this.state.name === "") ? 'default' : this.state.name,
+        // };
+        const user = {
+            email: values.email,
+            password: values.username,
+            // name: (this.state.name === "") ? 'default' : this.state.name,
+        };
+        firebaseSvc.login(user, this.loginFailed(), this.loginFailed());
     }
 
     taoUser = (user) => {
@@ -195,18 +210,25 @@ class ContactComponent extends Component {
                 }, () => console.log(this.state.users));
             }
         });
-        console.log('okie')
+        console.log(this.state)
     }
 
     render() {
+        const { navigate } = this.props.navigation;
         const { handleSubmit } = this.props;
+        // this.props.handleSubmit(this.setState({
+        //     password: password,
+        //     username: username
+        // }))
+        // console.log('>>>>>>>props ')
+        // console.log(handleSubmit)
 
         return (
             <View style={{ flex: 1, flexDirection: 'column', margin: 10, justifyContent: 'flex-start' }} >
                 <Text style={{ fontSize: 18, fontWeight: 'bold', width: 200, textAlign: 'center', margin: 40, alignContent: 'center', }} >LOGIN</Text>
                 <Field name="username" keyboardType="default" label="Username:" component={renderField} />
                 <Field name="email" d keyboardType="email-address" label="Email:" component={renderField} />
-                <TouchableOpacity onPress={()=>this.onPressLogin()} style={{ borderRadius: 10, margin: 10, alignItems: 'center', backgroundColor: 'lightblue' }} >
+                <TouchableOpacity onPress={handleSubmit(this.submit.bind(this))} style={{ borderRadius: 10, margin: 10, alignItems: 'center', backgroundColor: 'lightblue' }} >
                     <Text style={{
                         backgroundColor: 'steeblue', color: 'white', fontSize: 16,
                         height: 37, width: 200, textAlign: 'center', padding: 10,
@@ -218,11 +240,24 @@ class ContactComponent extends Component {
     }
 }
 
-
 const ContactForm = reduxForm({
     form: 'contact', // a unit name for only this form
     validate,
-})(ContactComponent)
+})(ContactComponent // class
+)
+
+function mapStateToProps(state) {
+    return {
+
+    }
+}
+
+function dispatchToProps(dispatch) {
+    return bindActionCreators({
+        initialize,
+    }, dispatch);
+}
+
 export default ContactForm
 
 

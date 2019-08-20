@@ -11,12 +11,16 @@ import ContactForm from '../../redux/contactForm'
     //     alert(`submit success with value = ${value}`)
     // };
 export default class Login_redux_form extends Component {
-   
+    
+    submit = values => {
+        // print the form values to the console
+        console.log(values)
+      }
 
     render() {
         return (
             <Provider store={store}>
-                <ContactForm  />
+                <ContactForm onSubmit={this.submit}  />
             </Provider>
         )
     }
