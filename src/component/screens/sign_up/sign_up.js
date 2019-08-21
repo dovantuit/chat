@@ -42,7 +42,7 @@ class sign_up extends Component {
             [
                 { text: 'Okay' }
             ])
-        this.props.navigation.navigate('login', {
+        this.props.navigation.navigate('login_redux_form', {
             name: this.state.name,
             email: this.state.email,
         });
@@ -59,6 +59,9 @@ class sign_up extends Component {
     onChangeTextEmail = email => this.setState({ email });
 
     onChangeTextPassword = password => this.setState({ password });
+
+    onChangeTextName = name => this.setState({ name });
+    
 
 
     render() {
@@ -82,7 +85,11 @@ class sign_up extends Component {
                     </Right>
                 </Header>
                 <Content>
-                    <Form style={{paddingBottom:15}}>
+                    <Form style={{ paddingBottom: 15 }}>
+                        <Item stackedLabel>
+                            <Label>Name</Label>
+                            <Input onChangeText={(name) => this.onChangeTextName(name)} />
+                        </Item>
                         <Item stackedLabel>
                             <Label>Username</Label>
                             <Input onChangeText={(email) => this.onChangeTextEmail(email)} />

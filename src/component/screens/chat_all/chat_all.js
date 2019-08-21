@@ -44,7 +44,7 @@ export default class Chat extends React.Component {
                 onSend={(message) => {
                     Backend.sendMessage(message);
                 }}
-                // showUserAvatar
+                showUserAvatar
                 // showAvatarForEveryMessage
                 user={{
                     _id: Backend.getUid(),

@@ -39,7 +39,7 @@ class login extends Component {
             password: this.state.password,
             name: (this.state.name === "") ? 'default' : this.state.name,
         };
-        firebaseSvc.login(user, this.loginSuccess, this.loginFailed);
+        await firebaseSvc.login(user, this.loginSuccess(), this.loginFailed());
     }
 
     taoUser = (user) => {

@@ -12,15 +12,15 @@ import ContactForm from '../../redux/contactForm'
     // };
 export default class Login_redux_form extends Component {
     
-    submit = values => {
-        // print the form values to the console
-        console.log(values)
-      }
+    // submit = values => {
+    //     // print the form values to the console
+    //     console.log(values)
+    //   }
 
     render() {
         return (
             <Provider store={store}>
-                <ContactForm onSubmit={this.submit}  />
+                <ContactForm />
             </Provider>
         )
     }

@@ -4,28 +4,17 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'reac
 import firebase from 'firebase';
 import Backend from '../../component/config/Backend';
 import { bindActionCreators } from 'redux';
-
-
-class FirebaseSvc {
-    login = async (user, success_callback, failed_callback) => {
-        // console.log('login')
-        // Alert('login')
-        // alert('login')
-        await firebase.auth()
-            .signInWithEmailAndPassword(user.email, user.password)
-            .then(success_callback, failed_callback);
-    }
-}
-const firebaseSvc = new FirebaseSvc();
+import { withNavigation } from 'react-navigation';
+import { thisExpression } from '@babel/types';
 
 // validation
 const validate = values => {
     const errors = {};
-    if (!values.username) {
-        errors.username = `Require!`
+    if (!values.password) {
+        errors.password = `Require!`
     }
-    else if (!values.username.length > 20) {
-        errors.username = `Name less than 20 letters`
+    else if (!values.password.length > 5) {
+        errors.password = `pass more than 5 letters`
     }
 
     if (!values.email) {
@@ -41,27 +30,27 @@ const renderField = ({ label, keyboardType, meta: { touched, error, warning }, i
     return (<View style={{ flexDirection: 'row', height: 50, alignItems: 'center' }}>
 
         <Text style={{ fontSize: 14, fontWeight: 'bold', width: 80 }}>{label}</Text>
-        <TextInput style={{ borderColor: 'steeblue', borderWidth: 1, height: 37, width: 220, padding: 5, }}
+        <TextInput style={{ borderColor: 'steeblue', borderWidth: 1, height: 37, width: 220, padding: 5, borderRadius: 5 }}
             keyboardType={keyboardType} onChangeText={onChange} {...restInput}>
 
         </TextInput>
 
-        {touched && ((error && <Text style={{ color: 'red' }}>{error}</Text>) ||
+        {touched && ((error && <Text style={{ color: 'red', marginLeft: 10, }}>{error}</Text>) ||
             (warning && <Text style={{ color: 'orange' }}>{warning}</Text>))
         }
     </View>
     );
 };
 
-
 class ContactComponent extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            user: [],
-            email: 'admin@gmail.com',
-            password: '123456',
+            users: [],
+            u_id: [],
+            email: '',
+            password: '',
             name: "",
         };
     }
@@ -72,70 +61,53 @@ class ContactComponent extends Component {
 
     onChangeUserName = name => this.setState({ name });
 
+    login = async (user) => {
+
+        await firebase.auth()
+            .signInWithEmailAndPassword(user.email, user.password)
+            .then(() => { this.loginSuccess() })
+            .catch(() => { this.loginFailed() });
+    }
 
     submit = values => {
-        //const log = values;
 
-        // onPressLogin(values);
         const user = {
             email: values.email,
-            password: values.username,
+            password: values.password,
             // name: (this.state.name === "") ? 'default' : this.state.name,
         };
-        firebaseSvc.login(user, this.loginSuccess(), this.loginFailed());
+        this.login(user);
 
-        // this.setState({
-        //     email:log.email,
-        //     name:log.username
-        // },()=>console.log(this.state))
-
-        //console.log('>>>>>>log')
-        // console.log(log.username)
-
-        // console.log(JSON.stringify(values))
-
-
-        //alert(`validtion success. value = ~${JSON.stringify(values)}`)
     }
 
 
-    onPressLogin = values => {
-
-        // console.log('login')
-        // const user = {
-        //     email: this.state.email,
-        //     password: this.state.password,
-        //     name: (this.state.name === "") ? 'default' : this.state.name,
-        // };
-        const user = {
-            email: values.email,
-            password: values.username,
-            // name: (this.state.name === "") ? 'default' : this.state.name,
-        };
-        firebaseSvc.login(user, this.loginFailed(), this.loginFailed());
-    }
 
     taoUser = (user) => {
-        // check trùng usesr
-        // var trung = 0;
-        //  this.state.users.map(that_user => {
-        //     if (that_user.email === user.email) {
-        //         trung += 1
-        //     }
-        // })
-        // if (trung = 0) {
-
-        firebase.database().ref('user').push({
-            email: user.email,
-            user_id: Backend.getUid(),
-            name: this.state.name,
-            avatar: 'https://placeimg.com/140/140/any',
-            sub_id: Backend.S4() + Backend.S4(),
-
+        // check trung user
+        const list_user = this.state.users;
+        const current_user_id = Backend.getUid();
+        var dem = 0
+        list_user.forEach((element) => {
+            if (user.email == element.email) {
+                dem++
+            }
         });
-        // }
 
-        ///
+        console.log('>>>>> lis_user')
+
+        if (dem == 0) {
+            // alert('chua ton tai user')
+            firebase.database().ref('user').push({
+                email: user.email,
+                user_id: Backend.getUid(),
+                name: user.email,
+                avatar: 'https://placeimg.com/140/140/any',
+                sub_id: Backend.S4() + Backend.S4(),
+
+            });
+        }
+
+
 
         // alert(user.email)
     }
@@ -152,18 +124,10 @@ class ContactComponent extends Component {
                 email = user.email;
                 uid = user.uid;
                 name = user.name;
-                // alert(uid)
             }
         } else {
             // No user is signed in.
         }
-        ///
-
-        // Alert.alert('Notice!',
-        //     `Successed login under ${this.state.email},\n you are in chat now`,
-        //     [
-        //         { text: 'Okie Great', onPress: () => console.log('okie') }
-        //     ])
         // alert('login successful, navigate.');
         this.props.navigation.navigate('menu', {
             uid: Backend.getUid(),
@@ -191,6 +155,7 @@ class ContactComponent extends Component {
             firebase.initializeApp(config);
         }
         firebase.database().ref('user').on("value", snapshot => {
+            console.log('>>>>>> users []: ')
             if (snapshot.val() !== undefined && snapshot.val() !== null) {
                 this.setState({
                     users: Object.values(snapshot.val())
@@ -210,29 +175,30 @@ class ContactComponent extends Component {
                 }, () => console.log(this.state.users));
             }
         });
-        console.log(this.state)
+        // console.log(this.state)
     }
-
+    // admin@gmail.com
     render() {
-        const { navigate } = this.props.navigation;
+        // const { navigate } = this.props.navigation;
         const { handleSubmit } = this.props;
-        // this.props.handleSubmit(this.setState({
-        //     password: password,
-        //     username: username
-        // }))
-        // console.log('>>>>>>>props ')
-        // console.log(handleSubmit)
 
         return (
             <View style={{ flex: 1, flexDirection: 'column', margin: 10, justifyContent: 'flex-start' }} >
                 <Text style={{ fontSize: 18, fontWeight: 'bold', width: 200, textAlign: 'center', margin: 40, alignContent: 'center', }} >LOGIN</Text>
-                <Field name="username" keyboardType="default" label="Username:" component={renderField} />
+
                 <Field name="email" d keyboardType="email-address" label="Email:" component={renderField} />
+                <Field name="password" keyboardType="default" label="Password:" component={renderField} />
                 <TouchableOpacity onPress={handleSubmit(this.submit.bind(this))} style={{ borderRadius: 10, margin: 10, alignItems: 'center', backgroundColor: 'lightblue' }} >
                     <Text style={{
                         backgroundColor: 'steeblue', color: 'white', fontSize: 16,
                         height: 37, width: 200, textAlign: 'center', padding: 10,
                     }}>Login</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('sign_up')} style={{ borderRadius: 10, margin: 10, alignItems: 'center', backgroundColor: 'lightblue' }} >
+                    <Text style={{
+                        backgroundColor: 'steeblue', color: 'white', fontSize: 16,
+                        height: 37, width: 200, textAlign: 'center', padding: 10,
+                    }}>Sign up</Text>
                 </TouchableOpacity>
 
             </View>
@@ -248,7 +214,6 @@ const ContactForm = reduxForm({
 
 function mapStateToProps(state) {
     return {
-
     }
 }
 
@@ -258,16 +223,6 @@ function dispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default ContactForm
-
-
-
-
-// class ContactComponent extends Component{
-//     render(){
-//         const { handelSubmit} = this.props;
-//         return (
-//             <View></View>
-//         )
-//     }
-// }
+// export default ContactForm
+// export default withNavigation(ChartStatePenetrationItem);
+export default withNavigation(ContactForm);

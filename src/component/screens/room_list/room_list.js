@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
-import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label } from 'native-base';
+import { View, FlatList, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
+import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label, List, ListItem, Thumbnail, Text } from 'native-base';
 
+// import firebase from 'firebase';
 import firebase from 'firebase';
-import Firebase from 'firebase';
 
 import Backend from '../../config/Backend';
 // import { ScrollView } from 'react-native-gesture-handler';
@@ -20,7 +20,7 @@ class room_list extends Component {
     componentDidMount() {
         // let username = await AsyncStorage.getItem('name');
         // this.setState({ username })
-        Firebase.database().ref('roomlists').on("value", snapshot => {
+        firebase.database().ref('roomlists').on("value", snapshot => {
             if (snapshot.val() !== undefined && snapshot.val() !== null) {
                 this.setState({
                     roomLists: Object.values(snapshot.val())
@@ -29,7 +29,7 @@ class room_list extends Component {
 
         });
         // users
-        Firebase.database().ref('user').on("value", snapshot => {
+        firebase.database().ref('user').on("value", snapshot => {
             if (snapshot.val() !== undefined && snapshot.val() !== null) {
                 this.setState({
                     users: Object.values(snapshot.val())
@@ -54,7 +54,7 @@ class room_list extends Component {
                 }
                 )}>
                 <View style={{ paddingHorizontal: 15 }}>
-                    <Text style={{ borderWidth: 1, paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 10 }}>{item.room_name}</Text>
+                    <Text style={{ borderWidth: 1, borderRadius: 5, paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 10 }}>{item.room_name}</Text>
                 </View></TouchableOpacity>
 
             // <TouchableOpacity onPress={() => this.props.navigation.navigate('Chatdetail'
@@ -75,35 +75,58 @@ class room_list extends Component {
                 onPress={() => { this.taoChatRoom(this_user) }}
             >
                 <View style={{ paddingHorizontal: 15 }}>
-                    <Text style={{ borderWidth: 1, paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 10 }}>{this_user.name}</Text>
+                    <Text style={{ borderWidth: 1, borderRadius: 5, paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 10 }}>{this_user.name}</Text>
                 </View>
             </TouchableOpacity>
         );
     }
 
-    taoChatRoom = (user) => {
-        if (Backend.getUid() === user.user_id.id_guess || Backend.getUid() === user.user_id.id_owner) {
+    taoChatRoom = (user_khach) => {
+        const list_room = this.state.roomLists;
+        const current_user = Backend.getUid();
+        var dem = 0
+        var id_phong_trung = 0
+
+        list_room.forEach((element) => {
+            if (element.user_id[0].id_owner == current_user && element.user_id[0].id_guess == user_khach.user_id) {
+                dem++
+                id_phong_trung = element.room_id
+            }
+        });
+
+
+        if (dem > 0) {
             // console.log(user)
-            alert('phong da ton tai')
+
+            // alert('phong da ton tai')
+            this.props.navigation.navigate("chat_room", {
+                // key: item.key,
+                room_id: id_phong_trung,
+                // room_name: item.room_name,
+                // user_id: item.user_id[0].id_guess
+            })
+
         }
         else {
-            Firebase.database().ref('roomlists').push({
-                room_id: this.S4() + this.S4(),
-                room_name: !(this.state.room_name === '') ? this.state.roomLists : 'default',
+            firebase.database().ref('roomlists').push({
+                room_id: Backend.S4() + Backend.S4(),
+                room_name: 'default',
 
                 user_id: [{
-                    id_guess: user.user_id,
+                    id_guess: user_khach.user_id,
                     id_owner: Backend.getUid(),
                 }]
 
             });
-            alert('da tao phong thanh cong')
+            // alert('da tao phong thanh cong')
         }
-        // this.props.navigation.navigate('chat', {
-        //     id_room: '',
-        //     // name: this.state.name,
-        //     // email: this.state.email,
-        // });
+        // this.props.navigation.navigate("chat_room", {
+        //     // key: item.key,
+        //     room_id: id_phong_trung,
+        //     // room_name: item.room_name,
+        //     // user_id: item.user_id[0].id_guess
+        // })
+
     }
 
 
@@ -124,11 +147,11 @@ class room_list extends Component {
                 </Header>
                 <Content>
                     <ScrollView>
-                        <FlatList
+                        {/* <FlatList
                             style={{ marginBottom: 10 }}
                             data={this.state.roomLists}
                             renderItem={({ item }, index) => this._renderRoomList(item)}
-                        />
+                        /> */}
                         <FlatList
                             style={{ marginBottom: 1 }}
                             data={this.state.users}

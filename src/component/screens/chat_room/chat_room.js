@@ -1,7 +1,12 @@
+
+
+
+
+
 import React from 'react';
 import { SafeAreaView } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat';
-import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label } from 'native-base';
+import { Container, Header, Left, Body, Right, Title, Subtitle } from 'native-base';
 import firebase from 'firebase';
 import Firebase from 'firebase'
 
@@ -27,13 +32,10 @@ class Backend {
             if (user) {
                 this.setUid(user.uid);
                 this.setUserName(user.name);
-                // console.log('>>> user info back from firebase')
-                // console.log(user)
-                // alert('sign in already')
+               
             } else {
                 firebase.auth().signInAnonymously().catch((error) => {
-                    // alert('sign in anonymous')
-                    //     alert(error.message);
+                    
                 });
             }
         });
@@ -121,22 +123,6 @@ export default class chat_room extends React.Component {
                 });
             }
         });
-
-
-        // console.log(this.props)
-        // console.log(this.props.navigation.state.params.room_id)
-
-        // Backend_chat_rom.loadMessages((message) => {
-        //     // this.setState((previousState) => {
-        //     //     return {
-        //     //         messages: GiftedChat.append(previousState.messages, message),
-        //     //     };
-        //     // });
-        // });
-
-
-
-
     };
 
     componentWillUnmount() {
