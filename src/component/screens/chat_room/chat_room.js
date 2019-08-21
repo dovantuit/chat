@@ -6,9 +6,9 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat';
-import { Container, Header, Left, Body, Right, Title, Subtitle } from 'native-base';
+import { Container, Header, Left, Body, Right, Title, Button, Icon, Text } from 'native-base';
 import firebase from 'firebase';
-import Firebase from 'firebase'
+// import Firebase from 'firebase'
 
 class Backend {
     uid = '';
@@ -32,10 +32,10 @@ class Backend {
             if (user) {
                 this.setUid(user.uid);
                 this.setUserName(user.name);
-               
+
             } else {
                 firebase.auth().signInAnonymously().catch((error) => {
-                    
+
                 });
             }
         });
@@ -79,18 +79,18 @@ class Backend {
     //     this.messagesRef.limitToLast(20).on('child_added', onReceive);
     // }
     // send the message to the Backend
-    sendMessage(message, id) {
+    sendMessage(message, room_id) {
         // for (let i = 0; i < message.length; i++) {
-            this.messagesRef = firebase.database().ref(`messages/${id}`);
-            this.messagesRef.push({
-                // id: this.S4() + this.S4(),
-                id: id,
-                user_id: this.getUid(),
-                is_read: false,
-                text: message[0].text,
-                user: message[0].user,
-                createdAt: firebase.database.ServerValue.TIMESTAMP,
-            });
+        this.messagesRef = firebase.database().ref(`messages/${room_id}`);
+        this.messagesRef.push({
+            // id: this.S4() + this.S4(),
+            id: room_id,
+            user_id: this.getUid(),
+            is_read: false,
+            text: message[0].text,
+            user: message[0].user,
+            createdAt: firebase.database.ServerValue.TIMESTAMP,
+        });
         // }
     }
     // close the connection to the Backend
@@ -114,9 +114,9 @@ export default class chat_room extends React.Component {
         // console.log(this.props.navigation.state.params.name)
     };
 
-     componentDidMount() {
+    componentDidMount() {
         this.setState({ room_id: this.props.navigation.state.params.room_id })
-        Firebase.database().ref(`messages/${this.props.navigation.state.params.room_id}`).on("value", snapshot => {
+        firebase.database().ref(`messages/${this.props.navigation.state.params.room_id}`).on("value", snapshot => {
             if (snapshot.val() !== undefined && snapshot.val() !== null) {
                 this.setState({
                     messages: Object.values(snapshot.val(), () => console.log(this.state.messages))
@@ -136,22 +136,39 @@ export default class chat_room extends React.Component {
     render() {
         return (
 
-            <GiftedChat
-                messages={this.state.messages}
-                onSend={(message) => {
-                    Backend_chat_rom.sendMessage(message, this.props.navigation.state.params.room_id);
-                }}
-                // showUserAvatar
-                // showAvatarForEveryMessage
-                user={{
-                    _id: Backend_chat_rom.getUid(),
-                    // name: this.props.navigation.state.params.name,
-                    name: this.state.name,
+            <Container>
+                <Header>
+                    <Left>
+                        <Button transparent onPress={()=>this.props.navigation.navigate("menu")}>
+                            <Icon name='arrow-back'/>
+                            <Text>Back</Text>
+                        </Button>
+                    </Left>
+                    <Body>
+                        <Title>{this.props.navigation.state.params.ten_phong}</Title>
+                    </Body>
+                    <Right />
+                </Header>
+                <GiftedChat
 
-                }}
-                onPressAvatar={() => alert(`name = ${Backend_chat_rom.getUserName()}`)}
+                    messages={this.state.messages}
+                    onSend={(message) => {
+                        Backend_chat_rom.sendMessage(message, this.props.navigation.state.params.room_id);
+                    }}
+                    // showUserAvatar
+                    // showAvatarForEveryMessage
+                    user={{
+                        _id: Backend_chat_rom.getUid(),
+                        // name: this.props.navigation.state.params.name,
+                        name: this.state.name,
 
-            />
+                    }}
+                    onPressAvatar={() => alert(`name = ${Backend_chat_rom.getUid()}`)}
+
+                />
+            </Container>
+
+
         );
     };
 

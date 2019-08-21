@@ -7,32 +7,32 @@ import room_list from '../room_list/room_list';
 
 export default createMaterialBottomTabNavigator(
     {
-        Home: {
-            screen: chat_all,
-            navigationOptions: {
-                tabBarLabel: 'chat all',
-                tabBarColor: 'blue',
-                tabBarIcon: ({ tintColor, focused }) => (
-                    <Icon size={20} name={Platform.OS === 'ios' ? (focused ? 'ios-home' : 'ios-home-outline') : 'md-home'} style={{ color: tintColor }} />
-                )
-            }
-        },
-
         Settings: {
             screen: room_list,
             navigationOptions: {
                 tabBarLabel: 'list rooms',
-                tabBarColor: 'blue',
+                tabBarColor: '#312974',
                 tabBarIcon: ({ tintColor, focused }) => (
-                    <Icon size={20} name={Platform.OS === 'ios' ? (focused ? 'ios-settings' : 'ios-settings-outline') : 'md-settings'} style={{ color: tintColor }} />
+                    <Icon size={20} name={'md-home'} style={{ color: tintColor }} />
                 )
             }
-        }
+        },
+        Home: {
+            screen: chat_all,
+            navigationOptions: {
+                tabBarLabel: 'chat all',
+                tabBarColor: '#312974',
+                tabBarIcon: ({ tintColor, focused }) => (
+                    <Icon size={20} name={'md-settings'} style={{ color: tintColor }} />
+                )
+            }
+        },
     },
     {
         shifting: true,
         activeTintColor: 'white',
-        inactiveTintColor: '#ddd',
+        // inactiveTintColor: '#ddd',
+        inactiveTintColor: 'white',
         barStyle: {
             height: 55
         }

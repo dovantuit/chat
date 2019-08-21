@@ -1,7 +1,8 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat';
-import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label } from 'native-base';
+// import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label } from 'native-base';
+import { Container, Header, Left, Body, Right, Title, Button, Icon, Text } from 'native-base';
 
 import Backend from '../../config/Backend';
 
@@ -38,6 +39,19 @@ export default class Chat extends React.Component {
 
     render() {
         return (
+            <Container>
+                <Header>
+                    <Left>
+                        {/* <Button transparent > */}
+                            {/* <Icon name='arrow-back'/> */}
+                            {/* <Text>Back</Text> */}
+                        {/* </Button> */}
+                    </Left>
+                    <Body>
+                        <Title>Chat all ...</Title>
+                    </Body>
+                    <Right />
+                </Header>
             
             <GiftedChat
                 messages={this.state.messages}
@@ -55,6 +69,7 @@ export default class Chat extends React.Component {
                 onPressAvatar={() => alert(`name = ${Backend.getUid()}`)}
 
             />
+             </Container>
         );
     };
 

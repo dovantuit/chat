@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
+import { View, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label, List, ListItem, Thumbnail, Text } from 'native-base';
 
 // import firebase from 'firebase';
@@ -71,11 +71,43 @@ class room_list extends Component {
         // console.log(room)
         // console.log(room.user_id)
         return (
-            <TouchableOpacity
+            <TouchableOpacity style={{ 
+                // borderWidth: 1,
+                 borderRadius: 15, marginVertical: 5, 
+                // flexDirection: 'column',
+                // justifyContent: 'space-between',
+                // alignItems: 'center',
+                backgroundColor: 'white',
+                height: 80
+
+            }}
                 onPress={() => { this.taoChatRoom(this_user) }}
             >
-                <View style={{ paddingHorizontal: 15 }}>
-                    <Text style={{ borderWidth: 1, borderRadius: 5, paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 10 }}>{this_user.name}</Text>
+                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', }}>
+                    <Image source={{ uri: this_user.avatar }} style={{
+                        marginTop: 10,
+                        height: 60,
+                        width: 60,
+                        borderRadius: 30,
+                        
+                    }}
+                    />
+                   
+                </View>
+                <View style={{ paddingHorizontal: 15, alignContent: 'space-between',marginLeft: 70,marginTop:-65 }}>
+                    
+                    <Text style={{
+                        // borderWidth: 1, borderRadius: 5,
+                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0
+                    }}>{this_user.name}</Text>
+                </View>
+                <View style={{ paddingHorizontal: 15, alignContent: 'space-between',marginLeft: 70,marginTop:-5 }}>
+                    
+                    <Text style={{
+                        fontSize: 11,
+                        // borderWidth: 1, borderRadius: 5,
+                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0
+                    }}>{this_user.sub_id}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -86,11 +118,13 @@ class room_list extends Component {
         const current_user = Backend.getUid();
         var dem = 0
         var id_phong_trung = 0
+        var ten_phong_trung = ""
 
         list_room.forEach((element) => {
             if (element.user_id[0].id_owner == current_user && element.user_id[0].id_guess == user_khach.user_id) {
                 dem++
                 id_phong_trung = element.room_id
+                ten_phong_trung = element.room_name
             }
         });
 
@@ -102,15 +136,19 @@ class room_list extends Component {
             this.props.navigation.navigate("chat_room", {
                 // key: item.key,
                 room_id: id_phong_trung,
+                ten_phong: ten_phong_trung,
+
                 // room_name: item.room_name,
                 // user_id: item.user_id[0].id_guess
             })
 
         }
         else {
+            var new_room_id = Backend.S4() + Backend.S4()
+
             firebase.database().ref('roomlists').push({
-                room_id: Backend.S4() + Backend.S4(),
-                room_name: 'default',
+                room_id: new_room_id,
+                room_name: user_khach.name,
 
                 user_id: [{
                     id_guess: user_khach.user_id,
@@ -122,7 +160,7 @@ class room_list extends Component {
         }
         // this.props.navigation.navigate("chat_room", {
         //     // key: item.key,
-        //     room_id: id_phong_trung,
+        //     room_id: new_room_id,
         //     // room_name: item.room_name,
         //     // user_id: item.user_id[0].id_guess
         // })
@@ -132,12 +170,12 @@ class room_list extends Component {
 
     render() {
         return (
-            <Container>
+            <Container style={{backgroundColor:'#6455BE'}} >
                 <Header>
                     <Left>
                     </Left>
                     <Body>
-                        <Title>List rooms</Title>
+                        <Title>Danh sách bạn bè</Title>
                     </Body>
                     <Right>
                         <Button transparent>
@@ -145,17 +183,18 @@ class room_list extends Component {
                         </Button>
                     </Right>
                 </Header>
-                <Content>
-                    <ScrollView>
+                <Content style={{ width: '96%', paddingLeft: "4%", }}>
+                    <ScrollView >
                         {/* <FlatList
                             style={{ marginBottom: 10 }}
                             data={this.state.roomLists}
-                            renderItem={({ item }, index) => this._renderRoomList(item)}
+                            renderItem={({ item }, index) => this._renderRoomList(item)}s
                         /> */}
                         <FlatList
                             style={{ marginBottom: 1 }}
                             data={this.state.users}
                             renderItem={({ item }, index) => this._renderUserList(item)}
+                            column={1}
                         />
 
                     </ScrollView>
