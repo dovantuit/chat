@@ -7,7 +7,7 @@ import room_list from '../room_list/room_list';
 
 export default createMaterialBottomTabNavigator(
     {
-        Settings: {
+        Roomlist: {
             screen: room_list,
             navigationOptions: {
                 tabBarLabel: 'list rooms',
@@ -17,18 +17,19 @@ export default createMaterialBottomTabNavigator(
                 )
             }
         },
-        Home: {
+        Chat_all: {
             screen: chat_all,
             navigationOptions: {
                 tabBarLabel: 'chat all',
                 tabBarColor: '#312974',
                 tabBarIcon: ({ tintColor, focused }) => (
-                    <Icon size={20} name={'md-settings'} style={{ color: tintColor }} />
+                    <Icon size={20} name={'md-contact'} style={{ color: tintColor }} />
                 )
             }
         },
     },
     {
+        initialRouteName: 'Roomlist',
         shifting: true,
         activeTintColor: 'white',
         // inactiveTintColor: '#ddd',

@@ -120,11 +120,11 @@ class room_list extends Component {
         var id_phong_trung = 0
         var ten_phong_trung = ""
 
-        list_room.forEach((element) => {
-            if (element.user_id[0].id_owner == current_user && element.user_id[0].id_guess == user_khach.user_id) {
+        list_room.forEach((earch_room) => {
+            if (earch_room.user_id[0].id_owner == current_user && earch_room.user_id[0].id_guess == user_khach.user_id) {
                 dem++
-                id_phong_trung = element.room_id
-                ten_phong_trung = element.room_name
+                id_phong_trung = earch_room.room_id
+                ten_phong_trung = earch_room.room_name
             }
         });
 
@@ -161,7 +161,7 @@ class room_list extends Component {
         // this.props.navigation.navigate("chat_room", {
         //     // key: item.key,
         //     room_id: new_room_id,
-        //     // room_name: item.room_name,
+        //     room_name: user_khach.earch_room,
         //     // user_id: item.user_id[0].id_guess
         // })
 
