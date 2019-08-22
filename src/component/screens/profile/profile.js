@@ -72,11 +72,13 @@ class profile extends Component {
                 <Content style={{ width: '96%', paddingLeft: "4%", }}>
                     <ScrollView >
                         <Image source={{ uri: this.state.avatar_user_trung }} style={{
-                            marginTop: 10,
+                             marginLeft: 130,
+                            // marginTop: 10,
+                            marginBottom: -10,
                             marginVertical: 'auto',
-                            height: 80,
-                            width: 80,
-                            borderRadius: 40,
+                            height: 120,
+                            width: 120,
+                            borderRadius: 60,
                         }}
                         />
                         <TouchableOpacity style={{

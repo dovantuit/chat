@@ -85,6 +85,7 @@ class room_list extends Component {
             >
                 <View style={{ paddingHorizontal: 15, alignContent: 'space-between', }}>
                     <Image source={{ uri: this_user.avatar }} style={{
+                       
                         marginTop: 10,
                         height: 60,
                         width: 60,
