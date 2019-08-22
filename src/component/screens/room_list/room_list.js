@@ -71,9 +71,9 @@ class room_list extends Component {
         // console.log(room)
         // console.log(room.user_id)
         return (
-            <TouchableOpacity style={{ 
+            <TouchableOpacity style={{
                 // borderWidth: 1,
-                 borderRadius: 15, marginVertical: 5, 
+                borderRadius: 15, marginVertical: 5,
                 // flexDirection: 'column',
                 // justifyContent: 'space-between',
                 // alignItems: 'center',
@@ -89,26 +89,33 @@ class room_list extends Component {
                         height: 60,
                         width: 60,
                         borderRadius: 30,
-                        
+
                     }}
                     />
-                   
+
                 </View>
-                <View style={{ paddingHorizontal: 15, alignContent: 'space-between',marginLeft: 70,marginTop:-65 }}>
-                    
+                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 70, marginTop: -65 }}>
+
                     <Text style={{
                         // borderWidth: 1, borderRadius: 5,
                         paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0
                     }}>{this_user.name}</Text>
                 </View>
-                <View style={{ paddingHorizontal: 15, alignContent: 'space-between',marginLeft: 70,marginTop:-5 }}>
-                    
+                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 70, marginTop: -5 }}>
+
                     <Text style={{
                         fontSize: 11,
                         // borderWidth: 1, borderRadius: 5,
                         paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0
                     }}>{this_user.sub_id}</Text>
                 </View>
+                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 300, marginTop: -35 }}>
+
+                   
+                    <Icon size={60} name='arrow-forward'/>
+                </View>
+
+
             </TouchableOpacity>
         );
     }
@@ -170,7 +177,7 @@ class room_list extends Component {
 
     render() {
         return (
-            <Container style={{backgroundColor:'#6455BE'}} >
+            <Container style={{ backgroundColor: '#6455BE' }} >
                 <Header>
                     <Left>
                     </Left>
@@ -183,7 +190,7 @@ class room_list extends Component {
                         </Button>
                     </Right>
                 </Header>
-                <Content style={{ width: '96%', paddingLeft: "4%", }}>
+                <Content style={{ width: '99.8%', paddingLeft: "0.2%", }}>
                     <ScrollView >
                         {/* <FlatList
                             style={{ marginBottom: 10 }}

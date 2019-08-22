@@ -27,8 +27,8 @@ export default createAppContainer(createSwitchNavigator(
 
   },
   {
-    // initialRouteName: 'menu',
-    initialRouteName: 'login_redux_form',
+    initialRouteName: 'menu',
+    // initialRouteName: 'login_redux_form',
 
   }
 ));

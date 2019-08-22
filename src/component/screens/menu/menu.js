@@ -4,6 +4,7 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import Icon from 'react-native-vector-icons/Ionicons';
 import chat_all from '../chat_all/chat_all';
 import room_list from '../room_list/room_list';
+import profile from '../profile/profile';
 
 export default createMaterialBottomTabNavigator(
     {
@@ -27,10 +28,21 @@ export default createMaterialBottomTabNavigator(
                 )
             }
         },
+        profile_tab: {
+            screen: profile,
+            navigationOptions: {
+                tabBarLabel: 'Profile',
+                tabBarColor: '#312974',
+                tabBarIcon: ({ tintColor, focused }) => (
+                    <Icon size={20} name={'md-contact'} style={{ color: tintColor }} />
+                )
+            }
+        },
     },
     {
-        initialRouteName: 'Roomlist',
-        shifting: true,
+        initialRouteName: 'Roomlist', // load this screen first
+        shifting: false, // shifting : true -> inactive tab won't show lable
+        labeled: true , // show tab label and icon
         activeTintColor: 'white',
         // inactiveTintColor: '#ddd',
         inactiveTintColor: 'white',

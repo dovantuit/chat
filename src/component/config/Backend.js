@@ -18,15 +18,17 @@ class Backend {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setUid(user.uid);
-                this.setUserName(user.name);
+                this.setUserEmail(user.email);
+
                 // console.log('>>> user info back from firebase')
                 // console.log(user)
                 // alert('sign in already')
             } else {
-                firebase.auth().signInAnonymously().catch((error) => {
-                // alert('sign in anonymous')
-                //     alert(error.message);
-                });
+                // firebase.auth().signInAnonymously().catch((error) => {
+                // // alert('sign in anonymous')
+                // //     alert(error.message);
+                // });
+                // alert('chua dang nhap')
             }
         });
         // sign out
@@ -47,13 +49,13 @@ class Backend {
     getUid() {
         return this.uid;
     }
-    setUserName(value){
-        this.name = value;
+    //user emai
+    setUserEmail(value) {
+        this.email = value;
     }
-    getUserName(){
-        return this.uid.name;
+    getUserEmail() {
+        return this.email;
     }
-   
     S4 = () => {
         return (((1 + Math.random() * Math.random()) * 0x10000) | 0).toString(16).substring(1);
     }
@@ -97,6 +99,18 @@ class Backend {
             this.messagesRef.off();
         }
     }
+    // sign out
+    sign_out = () => {
+        var auth = firebase.auth();
+        auth.signOut().then(function () {
+            // Sign-out successful.
+            console.log('signOUt already!')
+            // alert(Backend.getUserEmail())
+        }).catch(function (error) {
+            // An error happened.
+        });
+    }
+
 }
 
 export default new Backend();
