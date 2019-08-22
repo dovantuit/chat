@@ -49,14 +49,14 @@ class profile extends Component {
         });
     }
 
-    dang_xuat = ()=>{
+    dang_xuat = () => {
         Backend.sign_out();
         this.props.navigation.navigate("login_redux_form")
     }
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#6455BE' }} >
+            <Container style={{ backgroundColor: 'lightgray' }} >
                 <Header>
                     <Left>
                     </Left>
@@ -71,15 +71,16 @@ class profile extends Component {
                 </Header>
                 <Content style={{ width: '96%', paddingLeft: "4%", }}>
                     <ScrollView >
-                        <Image source={{ uri: this.state.avatar_user_trung }} style={{
-                             marginLeft: 130,
-                            // marginTop: 10,
-                            marginBottom: -10,
-                            marginVertical: 'auto',
-                            height: 120,
-                            width: 120,
-                            borderRadius: 60,
-                        }}
+                        <Image source={{ uri: this.state.avatar_user_trung || 'http://www.cando.org/wp-content/uploads/2014/11/Facebook-no-profile-picture-icon-620x389-e1416282314920-300x200.jpg' }}
+                            style={{
+                                marginLeft: 130,
+                                // marginTop: 10,
+                                marginBottom: -10,
+                                marginVertical: 'auto',
+                                height: 120,
+                                width: 120,
+                                borderRadius: 60,
+                            }}
                         />
                         <TouchableOpacity style={{
                             // borderWidth: 1,
@@ -93,9 +94,9 @@ class profile extends Component {
                         }}
                             onPress={() => { console.log('hello') }}
                         >
-                            <View style={{ marginLeft: 30 }}>
-                                <Text style={{ fontSize: 20, fontWeight: 'bold' }}
-                                >{this.state.name_user_trung}</Text>
+                            <View >
+                                <Text style={{ fontSize: 20, fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}
+                                >{this.state.name_user_trung || 'Bạn chưa đăng nhập!'}</Text>
 
                                 <Text>{this.state.id_user_trung}</Text>
                             </View>
@@ -115,7 +116,7 @@ class profile extends Component {
                                 Alert.alert('Chú ý!',
                                     `Bạn có muốn đăng xuất không?`,
                                     [
-                                        { text: 'Yes', onPress: () => this.dang_xuat()},
+                                        { text: 'Yes', onPress: () => this.dang_xuat() },
                                         { text: 'No', onPress: () => console.log('okie') }
                                     ])
                                 // alert('login successful, navigate.');

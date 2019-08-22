@@ -73,12 +73,16 @@ class room_list extends Component {
         return (
             <TouchableOpacity style={{
                 // borderWidth: 1,
-                borderRadius: 15, marginVertical: 5,
+                // borderRadius: 15, 
+                marginVertical: 0, // tren duoi
                 // flexDirection: 'column',
                 // justifyContent: 'space-between',
                 // alignItems: 'center',
                 backgroundColor: 'white',
-                height: 80
+                height: 80, 
+                borderBottomWidth: 1,
+                borderBottomStartRadius:50
+                // borderWidth:50
 
             }}
                 onPress={() => { this.taoChatRoom(this_user) }}
@@ -99,7 +103,7 @@ class room_list extends Component {
 
                     <Text style={{
                         // borderWidth: 1, borderRadius: 5,
-                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0
+                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0, fontWeight:'bold'
                     }}>{this_user.name}</Text>
                 </View>
                 <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 70, marginTop: -5 }}>
@@ -110,12 +114,11 @@ class room_list extends Component {
                         paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0
                     }}>{this_user.sub_id}</Text>
                 </View>
-                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 300, marginTop: -35 }}>
+                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 340, marginTop: -45 }}>
 
                    
-                    <Icon size={60} name='arrow-forward'/>
+                <Icon type="AntDesign" style={{ fontSize: 35, color: 'black' }} name="right" />
                 </View>
-
 
             </TouchableOpacity>
         );
@@ -157,7 +160,7 @@ class room_list extends Component {
             firebase.database().ref('roomlists').push({
                 room_id: new_room_id,
                 room_name: user_khach.name,
-
+                last_mess: "hello",
                 user_id: [{
                     id_guess: user_khach.user_id,
                     id_owner: Backend.getUid(),
@@ -178,7 +181,7 @@ class room_list extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#6455BE' }} >
+            <Container style={{ backgroundColor: 'ligtgray' }} >
                 <Header>
                     <Left>
                     </Left>
