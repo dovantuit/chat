@@ -59,6 +59,12 @@ class profile extends Component {
             <Container style={{ backgroundColor: 'lightgray' }} >
                 <Header>
                     <Left>
+                        <Button transparent >
+                            {/* <Icon name='arrow-back'/> */}
+                            <Icon type="AntDesign" style={{ marginLeft: 10, fontSize: 30, color: 'white' }} name="profile" />
+
+                            <Text>Back</Text>
+                        </Button>
                     </Left>
                     <Body>
                         <Title>Thông tin tài khoản</Title>

@@ -56,11 +56,11 @@ class Backend {
     getUserEmail() {
         return this.email;
     }
-    
+
     S4 = () => {
         return (((1 + Math.random() * Math.random()) * 0x10000) | 0).toString(16).substring(1);
     }
-    
+
     // retrieve the messages from the Backend
     loadMessages(callback) {
         this.messagesRef = firebase.database().ref('messages/all');

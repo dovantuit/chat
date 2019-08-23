@@ -25,8 +25,8 @@ export default class Chat extends React.Component {
                 };
             });
         });
-        
-        
+
+
     };
 
     componentWillUnmount() {
@@ -42,34 +42,35 @@ export default class Chat extends React.Component {
             <Container>
                 <Header>
                     <Left>
-                        {/* <Button transparent > */}
-                            {/* <Icon name='arrow-back'/> */}
-                            {/* <Text>Back</Text> */}
-                        {/* </Button> */}
+                        <Button transparent >
+                            <Icon type="AntDesign" style={{ fontSize: 25, color: 'white' }} name="message1" />
+
+                            <Text>Back</Text>
+                        </Button>
                     </Left>
                     <Body>
                         <Title>Chat all ...</Title>
                     </Body>
                     <Right />
                 </Header>
-            
-            <GiftedChat
-                messages={this.state.messages}
-                onSend={(message) => {
-                    Backend.sendMessage(message);
-                }}
-                showUserAvatar
-                // showAvatarForEveryMessage
-                user={{
-                    _id: Backend.getUid(),
-                    // name: this.props.navigation.state.params.name,
-                    name: this.state.name,
 
-                }}
-                onPressAvatar={() => alert(`name = ${Backend.getUid()}`)}
+                <GiftedChat
+                    messages={this.state.messages}
+                    onSend={(message) => {
+                        Backend.sendMessage(message);
+                    }}
+                    showUserAvatar
+                    // showAvatarForEveryMessage
+                    user={{
+                        _id: Backend.getUid(),
+                        // name: this.props.navigation.state.params.name,
+                        name: this.state.name,
 
-            />
-             </Container>
+                    }}
+                    onPressAvatar={() => alert(`name = ${Backend.getUid()}`)}
+
+                />
+            </Container>
         );
     };
 

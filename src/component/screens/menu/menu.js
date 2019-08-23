@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import chat_all from '../chat_all/chat_all';
 import room_list from '../room_list/room_list';
 import profile from '../profile/profile';
+// import Icon from 'native-base'
 
 export default createMaterialBottomTabNavigator(
     {
@@ -25,6 +26,8 @@ export default createMaterialBottomTabNavigator(
                 tabBarColor: '#312974',
                 tabBarIcon: ({ tintColor, focused }) => (
                     <Icon size={20} name={'md-contact'} style={{ color: tintColor }} />
+                // <Icon type="AntDesign" style={{  color: 'black' }} name="message1" />
+
                 )
             }
         },

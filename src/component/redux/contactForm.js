@@ -52,6 +52,8 @@ class ContactComponent extends Component {
             email: '',
             password: '',
             name: "",
+            // test
+            user_sql: []
         };
     }
 
@@ -154,27 +156,76 @@ class ContactComponent extends Component {
             };
             firebase.initializeApp(config);
         }
-        firebase.database().ref('user').on("value", snapshot => {
-            console.log('>>>>>> users []: ')
-            if (snapshot.val() !== undefined && snapshot.val() !== null) {
-                this.setState({
-                    users: Object.values(snapshot.val())
-                }, () => console.log(this.state.users));
-            }
-        });
+
+
+        // firebase.database().ref('user').on("value", snapshot => {
+        //     console.log('>>>>>> users []: ')
+        //     if (snapshot.val() !== undefined && snapshot.val() !== null) {
+        //         this.setState({
+        //             users: Object.values(snapshot.val())
+        //         }, () => console.log(this.state.users));
+        //     }
+        // });
 
     };
 
-    componentDidMount() {
-        // let username = await AsyncStorage.getItem('name');
-        // this.setState({ username })
-        firebase.database().ref('user').on("value", snapshot => {
-            if (snapshot.val() !== undefined && snapshot.val() !== null) {
+    async  loadData_SQL() {
+
+        fetch('http://10.0.5.179:3000/user_read')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // console.log(responseJson)
                 this.setState({
-                    users: Object.values(snapshot.val())
-                }, () => console.log(this.state.users));
-            }
-        });
+                    user_sql: responseJson.user,
+                }, () => console.log(this.state.user_sql)
+                );
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    async updateData_SQL() {
+        // alert('update now')
+        var url = 'http://10.0.5.179:3000/user_update';
+        var data = {
+            id: 18,
+            //id_user: '9',
+           // avatar: 'http://',
+          
+            //name: 'do van tu',
+            //sub_id: '9',
+           // user_id: '9'
+        };
+
+        fetch(url, {
+            method: 'POST', // or 'PUT'
+          
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                id: 18,
+                emai: 'adsadasasdasdasddasb@gmail.com',
+           }), // data can be `string` or {object}!
+        }).then(res => res.json())
+            .then(response => console.log('Success:', JSON.stringify(response)))
+            .catch(error => console.error('Error:', error));
+    }
+
+
+    componentDidMount() {
+        //this.loadData_SQL();
+        this.updateData_SQL();
+
+        // firebase.database().ref('user').on("value", snapshot => {
+        //     if (snapshot.val() !== undefined && snapshot.val() !== null) {
+        //         this.setState({
+        //             users: Object.values(snapshot.val())
+        //         });
+        //     }
+        // });
         // console.log(this.state)
     }
     // admin@gmail.com

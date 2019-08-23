@@ -14,10 +14,54 @@ class room_list extends Component {
         this.state = {
             roomLists: [],
             users: [],
+            user_sql: [],
+
         };
     }
 
+    async updateData_SQL() {
+        // alert('update now')
+        var url = 'http://10.0.5.179:3000/user_update';
+        var data = {
+            id: '18',
+            id_user: '9',
+            avatar: '9',
+            emai: '9',
+            name: '9',
+            sub_id: '9',
+            user_id: '9'
+        };
+
+        fetch(url, {
+            method: 'POST', // or 'PUT'
+            body: JSON.stringify(data), // data can be `string` or {object}!
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(res => res.json())
+            .then(response => console.log('Success:', JSON.stringify(response)))
+            .catch(error => console.error('Error:', error));
+    }
+
+    async  loadData_SQL() {
+
+        fetch('http://10.0.5.179:3000/user_read')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // console.log(responseJson)
+                this.setState({
+                    user_sql: responseJson.user,
+                }, () => console.log(this.state.user_sql)
+                );
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     componentDidMount() {
+        this.loadData_SQL()
+        this.updateData_SQL()
         // let username = await AsyncStorage.getItem('name');
         // this.setState({ username })
         firebase.database().ref('roomlists').on("value", snapshot => {
@@ -28,12 +72,13 @@ class room_list extends Component {
             }
 
         });
+
         // users
         firebase.database().ref('user').on("value", snapshot => {
             if (snapshot.val() !== undefined && snapshot.val() !== null) {
                 this.setState({
                     users: Object.values(snapshot.val())
-                }, () => console.log(Object.values(snapshot.val())));
+                });
             }
 
         });
@@ -79,9 +124,9 @@ class room_list extends Component {
                 // justifyContent: 'space-between',
                 // alignItems: 'center',
                 backgroundColor: 'white',
-                height: 80, 
+                height: 80,
                 borderBottomWidth: 1,
-                borderBottomStartRadius:50
+                borderBottomStartRadius: 50
                 // borderWidth:50
 
             }}
@@ -89,7 +134,7 @@ class room_list extends Component {
             >
                 <View style={{ paddingHorizontal: 15, alignContent: 'space-between', }}>
                     <Image source={{ uri: this_user.avatar }} style={{
-                       
+
                         marginTop: 10,
                         height: 60,
                         width: 60,
@@ -103,7 +148,7 @@ class room_list extends Component {
 
                     <Text style={{
                         // borderWidth: 1, borderRadius: 5,
-                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0, fontWeight:'bold'
+                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0, fontWeight: 'bold'
                     }}>{this_user.name}</Text>
                 </View>
                 <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 70, marginTop: -5 }}>
@@ -116,8 +161,8 @@ class room_list extends Component {
                 </View>
                 <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 340, marginTop: -45 }}>
 
-                   
-                <Icon type="AntDesign" style={{ fontSize: 35, color: 'black' }} name="right" />
+
+                    <Icon type="AntDesign" style={{ fontSize: 35, color: 'black' }} name="right" />
                 </View>
 
             </TouchableOpacity>
@@ -184,6 +229,11 @@ class room_list extends Component {
             <Container style={{ backgroundColor: 'ligtgray' }} >
                 <Header>
                     <Left>
+                        <Button transparent >
+                            <Icon type="AntDesign" style={{ fontSize: 25, color: 'white' }} name="contacts" />
+
+                            <Text>Back</Text>
+                        </Button>
                     </Left>
                     <Body>
                         <Title>Danh sách bạn bè</Title>
@@ -203,7 +253,7 @@ class room_list extends Component {
                         /> */}
                         <FlatList
                             style={{ marginBottom: 1 }}
-                            data={this.state.users}
+                            data={this.state.user_sql}
                             renderItem={({ item }, index) => this._renderUserList(item)}
                             column={1}
                         />
