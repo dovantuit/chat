@@ -4,7 +4,6 @@ import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, For
 
 // import firebase from 'firebase';
 import firebase from 'firebase';
-
 import Backend from '../../config/Backend';
 // import { ScrollView } from 'react-native-gesture-handler';
 
@@ -15,12 +14,10 @@ class room_list extends Component {
             roomLists: [],
             users: [],
             user_sql: [],
-
         };
     }
 
     async updateData_SQL() {
-        // alert('update now')
         var url = 'http://10.0.5.179:3000/user_update';
         var data = {
             id: '18',
@@ -33,7 +30,7 @@ class room_list extends Component {
         };
 
         fetch(url, {
-            method: 'POST', // or 'PUT'
+            method: 'POST',
             body: JSON.stringify(data), // data can be `string` or {object}!
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -48,7 +45,7 @@ class room_list extends Component {
         fetch('http://10.0.5.179:3000/user_read')
             .then((response) => response.json())
             .then((responseJson) => {
-                // console.log(responseJson)
+                // console.log(responseJson)  // show server respone
                 this.setState({
                     user_sql: responseJson.user,
                 }, () => console.log(this.state.user_sql)

@@ -82,8 +82,6 @@ class ContactComponent extends Component {
 
     }
 
-
-
     taoUser = (user) => {
         // check trung user
         const list_user = this.state.users;
@@ -156,17 +154,6 @@ class ContactComponent extends Component {
             };
             firebase.initializeApp(config);
         }
-
-
-        // firebase.database().ref('user').on("value", snapshot => {
-        //     console.log('>>>>>> users []: ')
-        //     if (snapshot.val() !== undefined && snapshot.val() !== null) {
-        //         this.setState({
-        //             users: Object.values(snapshot.val())
-        //         }, () => console.log(this.state.users));
-        //     }
-        // });
-
     };
 
     async  loadData_SQL() {
@@ -185,30 +172,47 @@ class ContactComponent extends Component {
             });
     }
 
-    async updateData_SQL() {
-        // alert('update now')
+    async update_user_Data_SQL() {
         var url = 'http://10.0.5.179:3000/user_update';
         var data = {
-            id: 18,
-            //id_user: '9',
-           // avatar: 'http://',
-          
-            //name: 'do van tu',
-            //sub_id: '9',
-           // user_id: '9'
+            id: 84,
+            id_user: '99',
+            avatar: 'http://',
+            emai: 'dovantuit@gmail.com',
+            name: 'do van tu',
+            sub_id: '9',
+            user_id: '9',
         };
 
         fetch(url, {
             method: 'POST', // or 'PUT'
-          
             headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                id: 18,
-                emai: 'adsadasasdasdasddasb@gmail.com',
-           }), // data can be `string` or {object}!
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data), // data can be `string` or {object}!
+        }).then(res => res.json())
+            .then(response => console.log('Success:', JSON.stringify(response)))
+            .catch(error => console.error('Error:', error));
+    }
+
+    async add_user_Data_SQL() {
+        var url = 'http://10.0.5.179:3000/user_add';
+        var data = {
+            id_user: '114',
+            avatar: '114',
+            emai: '114',
+            name: '114',
+            sub_id: '114',
+            user_id: '114',
+        };
+        fetch(url, {
+            method: 'POST', // or 'PUT'
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data), // data can be `string` or {object}!
         }).then(res => res.json())
             .then(response => console.log('Success:', JSON.stringify(response)))
             .catch(error => console.error('Error:', error));
@@ -217,22 +221,20 @@ class ContactComponent extends Component {
 
     componentDidMount() {
         //this.loadData_SQL();
-        this.updateData_SQL();
+        // this.add_user_Data_SQL();
+        this.update_user_Data_SQL();
 
-        // firebase.database().ref('user').on("value", snapshot => {
-        //     if (snapshot.val() !== undefined && snapshot.val() !== null) {
-        //         this.setState({
-        //             users: Object.values(snapshot.val())
-        //         });
-        //     }
-        // });
-        // console.log(this.state)
+        firebase.database().ref('user').on("value", snapshot => {
+            if (snapshot.val() !== undefined && snapshot.val() !== null) {
+                this.setState({
+                    users: Object.values(snapshot.val())
+                });
+            }
+        });
+        console.log(this.state)
     }
-    // admin@gmail.com
     render() {
-        // const { navigate } = this.props.navigation;
         const { handleSubmit } = this.props;
-
         return (
             <View style={{ flex: 1, flexDirection: 'column', margin: 10, justifyContent: 'flex-start' }} >
                 <Text style={{ fontSize: 18, fontWeight: 'bold', width: 200, textAlign: 'center', margin: 40, alignContent: 'center', }} >LOGIN</Text>
@@ -274,6 +276,4 @@ function dispatchToProps(dispatch) {
     }, dispatch);
 }
 
-// export default ContactForm
-// export default withNavigation(ChartStatePenetrationItem);
 export default withNavigation(ContactForm);

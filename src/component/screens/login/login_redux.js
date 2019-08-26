@@ -27,15 +27,3 @@ const ContactForm = reduxForm({
     form: 'contact', // a unit name for only this form
 })(ContactComponent)
 export default ContactForm
-
-
-
-
-// class ContactComponent extends Component{
-//     render(){
-//         const { handelSubmit} = this.props;
-//         return (
-//             <View></View>
-//         )
-//     }
-// }
